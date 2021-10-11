@@ -1,0 +1,36 @@
+{
+  "name": "@aha-develop/sentry-import",
+  "description": "sentry-import",
+  "version": "1.0.0",
+  "author": "jimmy",
+  "scripts": {
+    "format": "prettier --write 'src/**/*.ts'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sorza-jimmy/sentry-importer.git"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/react": "^16.8.0",
+    "prettier": "^2.3.2"
+  },
+  "ahaExtension": {
+    "cspSources": [
+      "https://sentry.io"
+    ],
+    "contributes": {
+      "importers": {
+        "sentryImport": {
+          "title": "Sentry Import",
+          "entryPoint": "src/importers/sentryImport.tsx"
+        }
+      }
+    }
+  },
+  "dependencies": {
+    "@aha-app/aha-develop-react": "^1.0.6",
+    "axios": "^0.21.1",
+    "react": "^17.0.2"
+  }
+}
