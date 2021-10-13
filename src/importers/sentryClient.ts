@@ -65,7 +65,7 @@ class SentryClient {
       const { data } = await this.axiosIns.get("/organizations/");
       return data;
     } catch (error) {
-      this.log("Could not get Workspaces", error);
+      this.log("Could not get Organizations", error);
       if (!this.checkRetry()) {
         return;
       }
@@ -114,11 +114,35 @@ class SentryClient {
 
       return { data: data, next_page: "" };
     } catch (error) {
-      this.log("Could not get Tasks", error);
+      this.log("Could not get Issues", error);
       if (!this.checkRetry()) {
         return;
       }
       return await this.auth(true, async () => await this.getIssues(options));
+    }
+  };
+
+  /**
+   * Get Latest Event from Sentry
+   *
+   * @param options
+   * @returns
+   */
+  getLatestEvent = async (options: IGetEventOptions): Promise<IEvent> => {
+    try {
+      if (!options?.issue_id) {
+        return null;
+      }
+      const axiosIns = this.axiosIns;
+      const { data } = await axiosIns.get(`/issues/${options.issue_id}/events/latest/`);
+
+      return data;
+    } catch (error) {
+      this.log("Could not get Latest Event", error);
+      if (!this.checkRetry()) {
+        return;
+      }
+      return await this.auth(true, async () => await this.getLatestEvent(options));
     }
   };
 

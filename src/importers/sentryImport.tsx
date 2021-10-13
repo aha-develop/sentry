@@ -1,4 +1,6 @@
 import React from "react";
+import { get } from "lodash";
+
 import sentryClient from "./sentryClient";
 import { convertOptions } from "./utils";
 import { MAX_RESULTS } from "./config";
@@ -66,6 +68,7 @@ importer.on({ action: "listCandidates" }, async ({ filters, nextPage }) => {
     records: tasks.map(({ id, title, ...rest }) => ({
       uniqueId: id,
       name: title,
+      id,
       title,
       ...rest,
     })),
@@ -81,7 +84,7 @@ importer.on({ action: "renderRecord" }, async ({ record, onUnmounted }) => {
   return (
     <div>
       <h6>{record?.shortId || ""}</h6>
-      <a href={`${record.permalink}`}>{record?.name || ""}</a>
+      <a href={`${record.permalink}`}>{record?.title || ""}</a>
     </div>
   );
 });
@@ -91,8 +94,23 @@ importer.on({ action: "renderRecord" }, async ({ record, onUnmounted }) => {
  */
 importer.on({ action: "importRecord" }, async ({ importRecord, ahaRecord }) => {
   await authenticate();
-  ahaRecord.description = `${importRecord?.metadata?.value || importRecord?.title}<p><a href='${
-    importRecord.permalink
-  }'>View on Sentry</a></p>` as any;
+
+  const eventData = await sentryClient.getLatestEvent({ issue_id: importRecord.id });
+  const frames: IEventTraceFrame[] = get(eventData, "entries.0.data.values.0.stacktrace.frames", []);
+  const stackTraces = frames.map((e: IEventTraceFrame, index: number) => {
+    const item = frames[frames.length - 1 - index];
+
+    return `&#9;at ${item?.function || ""} (${item?.filename || ""}:${item?.lineNo}:${item?.colNo})`;
+  });
+
+  const details = (importRecord?.title || "") + "\n" + stackTraces.join("\n");
+
+  ahaRecord.description = `
+  <p>
+    <pre>${details}</pre>
+  </p>
+  <p>
+    <a href='${importRecord.permalink}'>View on Sentry</a>
+  </p>` as any;
   await ahaRecord.save();
 });
