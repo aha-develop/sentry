@@ -6,7 +6,7 @@ declare interface IIssueMetadata {
   value?: string;
 }
 
-declare interface IIssue {
+declare interface IIssue extends Aha.ImportRecord {
   id: string;
   title: string;
   project: IProject;
@@ -27,7 +27,7 @@ declare interface IIssue {
   numComments?: number;
   shareId: null;
   shortId?: string;
-  stats?: any;
+  stats?: ISentryStats;
   status?: string;
   statusDetails?: any;
   subscriptionDetails?: string;
@@ -35,7 +35,14 @@ declare interface IIssue {
   userCount?: number;
 }
 
-declare interface IGetIssueOptions {
+declare type ISentryStatsDetail = Array<number>;
+
+declare interface ISentryStats {
+  "24h": ISentryStatsDetail[];
+  "30d": ISentryStatsDetail[];
+}
+
+declare interface IGetIssuesOptions {
   org_slug: string;
   project_slug?: string;
   limit?: number;

@@ -1730,6 +1730,7 @@ readonly position: number;
 readonly referenceNum: string;
 readonly releaseDate: string;
 readonly updatedAt: string;
+readonly project: Project;
 readonly theme: Note;
 readonly tasks: Array<Task>;
 }

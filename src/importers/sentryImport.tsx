@@ -1,11 +1,11 @@
 import React from "react";
 import { get } from "lodash";
 
-import sentryClient from "./sentryClient";
-import { convertOptions } from "./utils";
-import { MAX_RESULTS } from "./config";
+import sentryClient from "../helpers/SentryClient";
+import { convertOptions } from "@helpers/convertOptions";
+import { MAX_RESULTS } from "@helpers/config";
 
-const importer = aha.getImporter<IIssue>("aha-develop.sentry-import.sentryImport");
+const importer = aha.getImporter<IIssue>("aha-develop.sentry.sentryImport");
 
 async function authenticate() {
   await sentryClient.auth();
@@ -42,7 +42,7 @@ importer.on({ action: "filterValues" }, async ({ filterName, filters }): Promise
     }
     case "project": {
       const { organization = "" } = filters;
-      const projects = await sentryClient.getProjects({ org_slug: organization || "" });
+      const projects = await sentryClient.getProjects({ org_slug: organization ?? "" });
       return projects.map(convertOptions);
     }
   }
@@ -55,7 +55,7 @@ importer.on({ action: "filterValues" }, async ({ filterName, filters }): Promise
  */
 importer.on({ action: "listCandidates" }, async ({ filters, nextPage }) => {
   await authenticate();
-  const filterOptions: IGetIssueOptions = {
+  const filterOptions: IGetIssuesOptions = {
     org_slug: filters.organization,
     project_slug: filters.project,
     limit: MAX_RESULTS,
@@ -83,8 +83,8 @@ importer.on({ action: "renderRecord" }, async ({ record, onUnmounted }) => {
   await authenticate();
   return (
     <div>
-      <h6>{record?.shortId || ""}</h6>
-      <a href={`${record.permalink}`}>{record?.title || ""}</a>
+      <h6>{record?.shortId ?? ""}</h6>
+      <a href={`${record.permalink}`}>{record?.title ?? ""}</a>
     </div>
   );
 });
@@ -92,7 +92,7 @@ importer.on({ action: "renderRecord" }, async ({ record, onUnmounted }) => {
 /**
  * Imports Record
  */
-importer.on({ action: "importRecord" }, async ({ importRecord, ahaRecord }) => {
+importer.on({ action: "importRecord" }, async ({ importRecord, ahaRecord }, { identifier, settings }) => {
   await authenticate();
 
   const eventData = await sentryClient.getLatestEvent({ issue_id: importRecord.id });
@@ -100,10 +100,10 @@ importer.on({ action: "importRecord" }, async ({ importRecord, ahaRecord }) => {
   const stackTraces = frames.map((e: IEventTraceFrame, index: number) => {
     const item = frames[frames.length - 1 - index];
 
-    return `&#9;at ${item?.function || ""} (${item?.filename || ""}:${item?.lineNo}:${item?.colNo})`;
+    return `&#9;at ${item?.function ?? ""} (${item?.filename ?? ""}:${item?.lineNo}:${item?.colNo})`;
   });
 
-  const details = (importRecord?.title || "") + "\n" + stackTraces.join("\n");
+  const details = (importRecord?.title ?? "") + "\n" + stackTraces.join("\n");
 
   ahaRecord.description = `
   <p>
@@ -112,5 +112,8 @@ importer.on({ action: "importRecord" }, async ({ importRecord, ahaRecord }) => {
   <p>
     <a href='${importRecord.permalink}'>View on Sentry</a>
   </p>` as any;
+
+  await ahaRecord.setExtensionField(identifier, "isSentry", true);
+  await ahaRecord.setExtensionField(identifier, "issue_id", importRecord.id);
   await ahaRecord.save();
 });

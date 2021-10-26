@@ -13,3 +13,9 @@ export const MAX_RESULTS = 50;
  *
  */
 export const MAX_RETRY_COUNT = 3;
+
+/**
+ * Aha Extension Identifier
+ *
+ */
+export const IDENTIFIER = "aha-develop.sentry";

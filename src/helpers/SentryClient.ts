@@ -66,7 +66,7 @@ class SentryClient {
       return data;
     } catch (error) {
       this.log("Could not get Organizations", error);
-      if (!this.checkRetry()) {
+      if (!this.checkRetry(error)) {
         return;
       }
       this.retryCount++;
@@ -89,7 +89,7 @@ class SentryClient {
       return data;
     } catch (error) {
       this.log("Could not get Projects", error);
-      if (!this.checkRetry()) {
+      if (!this.checkRetry(error)) {
         return;
       }
       return await this.auth(true, async () => await this.getProjects(options));
@@ -102,23 +102,43 @@ class SentryClient {
    * @param options
    * @returns
    */
-  getIssues = async (options: IGetIssueOptions): Promise<{ data: IIssue[]; next_page: string | null }> => {
+  getIssues = async (options: IGetIssuesOptions): Promise<{ data: IIssue[]; next_page: string | null }> => {
     try {
       if (!options?.org_slug || !options?.project_slug) {
         return { data: [], next_page: null };
       }
-      const axiosIns = this.axiosIns;
-      const { data } = await axiosIns.get(`/projects/${options.org_slug}/${options.project_slug}/issues/`, {
+
+      const { data } = await this.axiosIns.get(`/projects/${options.org_slug}/${options.project_slug}/issues/`, {
         params: { cursor: options.cursor },
       });
 
       return { data: data, next_page: "" };
     } catch (error) {
       this.log("Could not get Issues", error);
-      if (!this.checkRetry()) {
+      if (!this.checkRetry(error)) {
         return;
       }
       return await this.auth(true, async () => await this.getIssues(options));
+    }
+  };
+
+  /**
+   * Get a Issue from Sentry
+   *
+   * @param options
+   * @returns
+   */
+  getIssue = async (issueId: string): Promise<IIssue> => {
+    try {
+      const { data } = await this.axiosIns.get(`/issues/${issueId}/`);
+
+      return data;
+    } catch (error) {
+      this.log("Could not get an issue", error.message);
+      if (!this.checkRetry(error)) {
+        return;
+      }
+      return await this.auth(true, async () => await this.getIssue(issueId));
     }
   };
 
@@ -139,7 +159,7 @@ class SentryClient {
       return data;
     } catch (error) {
       this.log("Could not get Latest Event", error);
-      if (!this.checkRetry()) {
+      if (!this.checkRetry(error)) {
         return;
       }
       return await this.auth(true, async () => await this.getLatestEvent(options));
@@ -156,8 +176,13 @@ class SentryClient {
     console.log(`[Error in Sentry API Call] => `, msg, error);
   };
 
-  checkRetry = () => {
-    if (this.retryCount >= MAX_RETRY_COUNT) {
+  /**
+   * Auth Retry
+   *
+   * @returns
+   */
+  checkRetry = (err: any) => {
+    if (this.retryCount >= MAX_RETRY_COUNT || err?.response?.status !== 401) {
       this.retryCount === 0;
       return false;
     }

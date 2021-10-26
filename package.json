@@ -1,6 +1,6 @@
 {
-  "name": "@aha-develop/sentry-import",
-  "description": "sentry-import",
+  "name": "@aha-develop/sentry",
+  "description": "Sentry Import",
   "version": "1.0.0",
   "author": "jimmy",
   "scripts": {
@@ -14,6 +14,7 @@
   "devDependencies": {
     "@types/lodash": "^4.14.175",
     "@types/react": "^16.8.0",
+    "@types/recharts": "^1.8.23",
     "prettier": "^2.3.2"
   },
   "ahaExtension": {
@@ -26,6 +27,33 @@
           "title": "Sentry Import",
           "entryPoint": "src/importers/sentryImport.tsx"
         }
+      },
+      "endpoints": {
+        "sentryIssues": {
+          "title": "Hook from Sentry",
+          "entryPoint": "src/endpoints/sentryHook.ts",
+          "public": true
+        }
+      },
+      "views": {
+        "sentryDashboard": {
+          "title": "Sentry Dashboard",
+          "entryPoint": "src/views/sentryDashboard.tsx",
+          "host": "page",
+          "location": {
+            "menu": "Work"
+          }
+        },
+        "sentryAttribute": {
+          "title": "Sentry",
+          "entryPoint": "src/views/sentryAttribute.tsx",
+          "host": "attribute",
+          "recordTypes": [
+            "Feature",
+            "Epic",
+            "Requirement"
+          ]
+        }
       }
     }
   },
@@ -33,6 +61,8 @@
     "@aha-app/aha-develop-react": "^1.0.6",
     "axios": "^0.21.1",
     "lodash": "^4.17.21",
-    "react": "^17.0.2"
+    "moment": "^2.29.1",
+    "react": "^17.0.2",
+    "recharts": "^2.1.5"
   }
 }
