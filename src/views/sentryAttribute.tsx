@@ -8,18 +8,9 @@ aha.on("sentryAttribute", ({ record, fields, onUnmounted }, { identifier, settin
     console.log("Un-mounting component for", record.identifier);
   });
 
-  if (!fields?.isSentry) {
-    return <>Not linked with Sentry</>;
-  }
-
   return (
     <SentryApp>
-      <Styles />
       <Attribute fields={fields} record={record} />
     </SentryApp>
   );
 });
-
-const Styles = () => {
-  return <style></style>;
-};

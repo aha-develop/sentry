@@ -54,6 +54,12 @@
             "Requirement"
           ]
         }
+      },
+      "commands": {
+        "addLink": {
+          "title": "Sentry: Link sentry issue to record",
+          "entryPoint": "src/commands/addLink.ts"
+        }
       }
     }
   },

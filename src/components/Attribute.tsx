@@ -4,6 +4,9 @@ import sentryClient from "@helpers/SentryClient";
 import { convertStrToDate } from "@helpers/convertStrToDate";
 import AttributeCard from "./AttributeCard";
 import AttributeChart from "./AttributeChart";
+import { setExtensionFields } from "@helpers/setExtensionFields";
+import { parseURL } from "@helpers/parseURL";
+import { runCommand } from "@helpers/runCommand";
 
 export type AttributeProps = {
   record: Aha.RecordUnion;
@@ -11,16 +14,29 @@ export type AttributeProps = {
 };
 
 const Attribute = ({ fields, record }: AttributeProps) => {
-  const { error, authed, fetchData, data, loading } = useAuth(async (authData: any) => {
-    sentryClient.setToken(authData?.token ?? "");
-    return await sentryClient.getIssue(fields?.issue_id);
-  });
+  const { error, authed, data, loading } = useAuth(
+    async (authData: any): Promise<IIssue> => {
+      if (!authData?.token || !fields?.issue_id) {
+        return undefined;
+      }
+      sentryClient.setToken(authData?.token ?? "");
+      return await sentryClient.getIssue(fields?.issue_id);
+    },
+    undefined,
+    [fields?.issue_id, fields?.isSentry]
+  );
 
-  React.useEffect(() => {
-    if (authed) {
-      fetchData();
-    }
-  }, [authed]);
+  const handleClickAddSentry = async () => {
+    runCommand(record, "addLink");
+  };
+
+  if (!fields?.isSentry) {
+    return (
+      <aha-button kind="link" size="medium" type="button" onClick={handleClickAddSentry}>
+        Link to Sentry Issue
+      </aha-button>
+    );
+  }
 
   if (loading) {
     return <aha-spinner />;

@@ -4,6 +4,7 @@ import { get } from "lodash";
 import sentryClient from "../helpers/SentryClient";
 import { convertOptions } from "@helpers/convertOptions";
 import { MAX_RESULTS } from "@helpers/config";
+import { setExtensionFields } from "@helpers/setExtensionFields";
 
 const importer = aha.getImporter<IIssue>("aha-develop.sentry.sentryImport");
 
@@ -113,7 +114,7 @@ importer.on({ action: "importRecord" }, async ({ importRecord, ahaRecord }, { id
     <a href='${importRecord.permalink}'>View on Sentry</a>
   </p>` as any;
 
-  await ahaRecord.setExtensionField(identifier, "isSentry", true);
-  await ahaRecord.setExtensionField(identifier, "issue_id", importRecord.id);
+  await setExtensionFields(ahaRecord, { isSentry: true, issue_id: importRecord.id }, identifier);
+
   await ahaRecord.save();
 });
