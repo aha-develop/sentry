@@ -47,7 +47,7 @@ class SentryClient {
 
     let options = {};
     if (!reAuth) {
-      options = { useCachedRetry: true };
+      options = { useCachedRetry: true, reAuth: false };
     }
 
     const authData = await aha.auth("sentry", options);

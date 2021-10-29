@@ -1,7 +1,7 @@
 import { convertStrToDate } from "@helpers/convertStrToDate";
 import _ from "lodash";
 import React from "react";
-import { BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Bar } from "recharts";
+import { BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Bar, ResponsiveContainer } from "recharts";
 import moment from "moment";
 import Select from "./Select";
 
@@ -45,16 +45,18 @@ const AttributeChart = ({ stats }: AttributeChartProps) => {
     });
 
   return (
-    <div style={{ padding: "5px", border: "1px solid #d3d3d3", borderRadius: "5px" }}>
+    <div style={{ width: "100%", padding: "5px", border: "1px solid #d3d3d3", borderRadius: "5px" }}>
       <div>
         <Select options={SelectRangeOptions} onChange={(val) => setRange(val as any)} value={range} />
       </div>
-      <BarChart barSize={10} width={430} height={250} data={data}>
-        <CartesianGrid strokeDasharray="4" />
-        <XAxis dataKey="name" interval={4} />
-        <Tooltip content={renderCustomToolTip} />
-        <Bar minPointSize={3} dataKey="value" fill="#c0a0cf" />
-      </BarChart>
+      <ResponsiveContainer width="100%" height={250}>
+        <BarChart barSize={7} data={data}>
+          <CartesianGrid strokeDasharray="4" />
+          <XAxis dataKey="name" interval={4} />
+          <Tooltip content={renderCustomToolTip} />
+          <Bar minPointSize={3} dataKey="value" fill="#c0a0cf" />
+        </BarChart>
+      </ResponsiveContainer>
     </div>
   );
 };

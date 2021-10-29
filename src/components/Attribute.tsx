@@ -14,7 +14,7 @@ export type AttributeProps = {
 };
 
 const Attribute = ({ fields, record }: AttributeProps) => {
-  const { error, authed, data, loading } = useAuth(
+  const { error, authed, data, loading, fetchData } = useAuth(
     async (authData: any): Promise<IIssue> => {
       if (!authData?.token || !fields?.issue_id) {
         return undefined;
@@ -50,8 +50,17 @@ const Attribute = ({ fields, record }: AttributeProps) => {
   ];
 
   return (
-    <aha-flex align-items="center" justify-content="space-between" gap="5px">
-      {error && <div>{error}</div>}
+    <aha-flex align-items="center" direction="row" gap="5px">
+      {error && !data && (
+        <div>
+          {error}
+          <br />
+          <br />
+          <aha-button kind="primary" type="button" onClick={() => fetchData()}>
+            Authenticate
+          </aha-button>
+        </div>
+      )}
       {data && (
         <aha-flex direction="column" style={{ width: "100%" }}>
           <aha-flex direction="row" style={{ paddingBottom: "10px" }}>
