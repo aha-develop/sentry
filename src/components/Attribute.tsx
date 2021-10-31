@@ -62,20 +62,22 @@ const Attribute = ({ fields, record }: AttributeProps) => {
         </div>
       )}
       {data && (
-        <aha-flex direction="column" style={{ width: "100%" }}>
-          <aha-flex direction="row" style={{ paddingBottom: "10px" }}>
-            <aha-flex direction="column" style={{ flexGrow: 1 }}>
-              <h4 style={{ textTransform: "capitalize", fontWeight: "bold" }}>{data?.type ?? ""}</h4>
-              <p>{data?.title ?? ""}</p>
+        <aha-flex direction="column" gap="20px" style={{ maxWidth: "calc(100% - 42px)", border: "1px solid var(--theme-primary-border)", borderRadius: 4, padding: 20 }}>
+          <aha-flex direction="column">
+            <aha-flex direction="row" justify-content="space-between">
+              <h4 style={{ textTransform: "capitalize", fontWeight: "bold" }}>{data?.metadata?.type ?? ""}</h4>
+              <strong style={{ fontSize: '12px', textTransform: "uppercase" }}>{data?.shortId ?? ""}</strong>
             </aha-flex>
-            <aha-flex style={{ textTransform: "capitalize" }}>{data?.project?.name ?? ""}</aha-flex>
+            <div style={{ fontSize: 12, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>{data?.metadata?.value ?? ""}</div>
           </aha-flex>
-          <aha-flex direction="row" justify-content="space-between">
+
+          <aha-flex direction="row" justify-content="space-between" gap="10px">
             {details.map((e) => (
               <AttributeCard {...e} />
             ))}
           </aha-flex>
-          <aha-flex direction="row">
+
+          <aha-flex direction="row" justifyContent="stretch">
             <AttributeChart stats={data?.stats} />
           </aha-flex>
         </aha-flex>

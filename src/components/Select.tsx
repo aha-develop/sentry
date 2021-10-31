@@ -16,8 +16,12 @@ const Select = ({ options, value, labelKey = "label", valueKey = "value", onChan
 
   return (
     <aha-menu>
-      <aha-button slot="button" type="attribute">
-        {_.get(_.find(options, { [valueKey]: value }), labelKey, "...")}
+      <aha-button slot="button" size="small" type="attribute">
+        <aha-icon icon="fa-regular fa-clock" />
+        &nbsp;
+        <strong>{_.get(_.find(options, { [valueKey]: value }), labelKey, "...")}</strong>
+        &nbsp;
+        <aha-icon icon="fa-solid fa-caret-down" />
       </aha-button>
       {options.map((option) => {
         let val = "";

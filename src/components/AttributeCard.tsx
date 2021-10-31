@@ -7,10 +7,12 @@ export type AttributeCardProps = {
 
 const AttributeCard = (props: AttributeCardProps) => {
   return (
-    <aha-flex direction="column" justify-content="flex-end">
-      <p style={{ textAlign: "end" }}>{props?.name ?? ""}</p>
-      <p style={{ textAlign: "end", fontWeight: "bold", fontSize: "1rem", color: "#c0a0cf" }}>{props?.count ?? "0"}</p>
-    </aha-flex>
+    <div style={{ backgroundColor: "var(--theme-tertiary-background)", flexGrow: 1, padding: '8px', borderRadius: '4px' }}>
+      <aha-flex direction="column" style={{ backgroundColor: "var(--theme-tertiary-background)" }}>
+        <div style={{ fontWeight: "bold", fontSize: "14px" }}>{props?.count ?? "0"}</div>
+        <div style={{ fontSize: '12px', color: "var(--theme-tertiary-text)" }}>{props?.name ?? ""}</div>
+      </aha-flex>
+    </div>
   );
 };
 

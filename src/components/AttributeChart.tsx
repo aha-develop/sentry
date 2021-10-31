@@ -45,16 +45,14 @@ const AttributeChart = ({ stats }: AttributeChartProps) => {
     });
 
   return (
-    <div style={{ width: "100%", padding: "5px", border: "1px solid #d3d3d3", borderRadius: "5px" }}>
+    <div style={{ width: "100%" }}>
       <div>
         <Select options={SelectRangeOptions} onChange={(val) => setRange(val as any)} value={range} />
       </div>
-      <ResponsiveContainer width="100%" height={250}>
+      <ResponsiveContainer width="100%" height={100}>
         <BarChart barSize={7} data={data}>
-          <CartesianGrid strokeDasharray="4" />
-          <XAxis dataKey="name" interval={4} />
           <Tooltip content={renderCustomToolTip} />
-          <Bar minPointSize={3} dataKey="value" fill="#c0a0cf" />
+          <Bar minPointSize={3} dataKey="value" fill="var(--aha-blue-500)" />
         </BarChart>
       </ResponsiveContainer>
     </div>
