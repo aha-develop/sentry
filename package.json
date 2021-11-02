@@ -36,14 +36,6 @@
         }
       },
       "views": {
-        "sentryDashboard": {
-          "title": "Sentry Dashboard",
-          "entryPoint": "src/views/sentryDashboard.tsx",
-          "host": "page",
-          "location": {
-            "menu": "Work"
-          }
-        },
         "sentryAttribute": {
           "title": "Sentry",
           "entryPoint": "src/views/sentryAttribute.tsx",
