@@ -62,7 +62,7 @@ const Attribute = ({ fields, record }: AttributeProps) => {
         </div>
       )}
       {data && (
-        <aha-flex direction="column" gap="20px" style={{ maxWidth: "calc(100% - 42px)", border: "1px solid var(--theme-primary-border)", borderRadius: 4, padding: 20 }}>
+        <aha-flex direction="column" gap="20px" style={{ width: "calc(100% - 42px)", border: "1px solid var(--theme-primary-border)", borderRadius: 4, padding: 20 }}>
           <aha-flex direction="column">
             <aha-flex direction="row" justify-content="space-between">
               <h4 style={{ textTransform: "capitalize", fontWeight: "bold" }}>{data?.metadata?.type ?? ""}</h4>
@@ -77,9 +77,16 @@ const Attribute = ({ fields, record }: AttributeProps) => {
             ))}
           </aha-flex>
 
-          <aha-flex direction="row" justifyContent="stretch">
+          <aha-flex direction="row" justify-content="stretch">
             <AttributeChart stats={data?.stats} />
           </aha-flex>
+
+          <aha-flex direction="row" justify-content="flex-end">
+            <aha-button kind="secondary" href={data.permalink} size="mini">
+              View in Sentry
+            </aha-button>
+          </aha-flex>
+
         </aha-flex>
       )}
     </aha-flex>
