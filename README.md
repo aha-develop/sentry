@@ -1,20 +1,19 @@
-# Sentry Tasks Importer - Aha Extension
+# Sentry for Aha! Develop
   
-TThis [Aha! Develop](https://www.aha.io/develop/overview) extension allows you to bring Sentry Tasks into Aha!. It currently supports:
+This [Aha! Develop](https://www.aha.io/develop/overview) extension provides an integration with Sentry. It currently provides two contributions:
 
-- Name (as String)
-- Notes (as HTML)
-- Section Name (as String)
+- `Sentry importer` – Import Sentry issues into Aha! Develop.
+- `Sentry attribute` – Shows the latest Sentry stats directly in on the feature.
 
 ## Demo
 
-![Sentry importer extension demo](sentry-demo.gif)
+![Sentry importer extension demo](res/sentry-extension.png)
 
 ## Installing the extension
 
 **Note: In order to install an extension into your Aha! Develop account, you must be an account administrator.**
 
-Install the Sentry import extension by clicking [here](https://secure.aha.io/settings/account/extensions/install?url=https%3A%2F%2Fsecure.aha.io%2Fextensions%2Faha-develop.sentry-import.gz).
+Install the Sentry import extension by clicking [here](https://secure.aha.io/settings/account/extensions/install?url=https%3A%2F%2Fsecure.aha.io%2Fextensions%2Faha-develop.sentry.gz).
 
 ## Working on the extension
 
@@ -27,7 +26,7 @@ npm install -g aha-cli
 Clone the repo:
 
 ```sh
-git clone https://github.com/sorza-jimmy/sentry-importer.git
+git clone https://github.com/aha-develop/sentry.git
 ```
 
 **Note: In order to install an extension into your Aha! Develop account, you must be an account administrator.**

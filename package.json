@@ -1,14 +1,14 @@
 {
   "name": "@aha-develop/sentry",
-  "description": "Sentry Import",
+  "description": "Sentry integration",
   "version": "1.0.0",
-  "author": "jimmy",
+  "author": "Aha! (support@aha.io)",
   "scripts": {
     "format": "prettier --write 'src/**/*.ts'"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/sorza-jimmy/sentry-importer.git"
+    "url": "https://github.com/aha-develop/sentry.git"
   },
   "license": "MIT",
   "devDependencies": {
@@ -24,7 +24,7 @@
     "contributes": {
       "importers": {
         "sentryImport": {
-          "title": "Sentry Import",
+          "title": "Sentry",
           "entryPoint": "src/importers/sentryImport.tsx"
         }
       },
