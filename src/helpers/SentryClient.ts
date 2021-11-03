@@ -40,17 +40,8 @@ class SentryClient {
    * @param callBack
    * @returns
    */
-  auth = async (reAuth = false, callBack: () => any = () => {}) => {
-    if (this.axiosIns && !reAuth) {
-      return;
-    }
-
-    let options = {};
-    if (!reAuth) {
-      options = { useCachedRetry: true, reAuth: false };
-    }
-
-    const authData = await aha.auth("sentry", options);
+  auth = async (callBack: () => any = () => {}) => {
+    const authData = await aha.auth("sentry", { useCachedRetry: true });
     this.setToken(authData.token);
     return await callBack();
   };
@@ -61,17 +52,8 @@ class SentryClient {
    * @returns
    */
   getOrganizations = async (): Promise<IOrganization[]> => {
-    try {
-      const { data } = await this.axiosIns.get("/organizations/");
-      return data;
-    } catch (error) {
-      this.log("Could not get Organizations", error);
-      if (!this.checkRetry(error)) {
-        return;
-      }
-      this.retryCount++;
-      return await this.auth(true, async () => await this.getOrganizations());
-    }
+    const { data } = await this.get("/organizations/");
+    return data;
   };
 
   /**
@@ -81,19 +63,11 @@ class SentryClient {
    * @returns
    */
   getProjects = async (options: IGetProjectOptions): Promise<IProject[]> => {
-    try {
-      if (!options.org_slug) {
-        return [];
-      }
-      const { data } = await this.axiosIns.get(`/organizations/${options.org_slug}/projects/`);
-      return data;
-    } catch (error) {
-      this.log("Could not get Projects", error);
-      if (!this.checkRetry(error)) {
-        return;
-      }
-      return await this.auth(true, async () => await this.getProjects(options));
+    if (!options.org_slug) {
+      return [];
     }
+    const { data } = await this.get(`/organizations/${options.org_slug}/projects/`);
+    return data;
   };
 
   /**
@@ -103,23 +77,15 @@ class SentryClient {
    * @returns
    */
   getIssues = async (options: IGetIssuesOptions): Promise<{ data: IIssue[]; next_page: string | null }> => {
-    try {
-      if (!options?.org_slug || !options?.project_slug) {
-        return { data: [], next_page: null };
-      }
-
-      const { data } = await this.axiosIns.get(`/projects/${options.org_slug}/${options.project_slug}/issues/`, {
-        params: { cursor: options.cursor },
-      });
-
-      return { data: data, next_page: "" };
-    } catch (error) {
-      this.log("Could not get Issues", error);
-      if (!this.checkRetry(error)) {
-        return;
-      }
-      return await this.auth(true, async () => await this.getIssues(options));
+    if (!options?.org_slug || !options?.project_slug) {
+      return { data: [], next_page: null };
     }
+
+    const { data } = await this.get(`/projects/${options.org_slug}/${options.project_slug}/issues/`, {
+      params: { cursor: options.cursor },
+    });
+
+    return { data: data, next_page: "" };
   };
 
   /**
@@ -129,17 +95,9 @@ class SentryClient {
    * @returns
    */
   getIssue = async (issueId: string): Promise<IIssue> => {
-    try {
-      const { data } = await this.axiosIns.get(`/issues/${issueId}/`);
+    const { data } = await this.get(`/issues/${issueId}/`);
 
-      return data;
-    } catch (error) {
-      this.log("Could not get an issue", error.message);
-      if (!this.checkRetry(error)) {
-        return;
-      }
-      return await this.auth(true, async () => await this.getIssue(issueId));
-    }
+    return data;
   };
 
   /**
@@ -149,21 +107,13 @@ class SentryClient {
    * @returns
    */
   getLatestEvent = async (options: IGetEventOptions): Promise<IEvent> => {
-    try {
-      if (!options?.issue_id) {
-        return null;
-      }
-      const axiosIns = this.axiosIns;
-      const { data } = await axiosIns.get(`/issues/${options.issue_id}/events/latest/`);
-
-      return data;
-    } catch (error) {
-      this.log("Could not get Latest Event", error);
-      if (!this.checkRetry(error)) {
-        return;
-      }
-      return await this.auth(true, async () => await this.getLatestEvent(options));
+    if (!options?.issue_id) {
+      return null;
     }
+    const axiosIns = this.axiosIns;
+    const { data } = await axiosIns.get(`/issues/${options.issue_id}/events/latest/`);
+
+    return data;
   };
 
   /**
@@ -188,6 +138,19 @@ class SentryClient {
     }
     this.retryCount++;
     return true;
+  };
+
+  get = async (...args: Parameters<AxiosInstance["get"]>) => {
+    try {
+      const data = await this.axiosIns.get(...args);
+      return data;
+    } catch (err) {
+      if ((err.message as string).includes("401")) {
+        throw new aha.AuthError(err.message, "sentry");
+      } else {
+        throw err;
+      }
+    }
   };
 }
 
