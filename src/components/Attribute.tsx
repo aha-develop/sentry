@@ -26,6 +26,14 @@ const Attribute = ({ fields, record }: AttributeProps) => {
     [fields?.issue_id, fields?.isSentry]
   );
 
+  if (!authed) {
+    return (
+      <aha-button size="small" onClick={e => fetchData()}>
+        Authenticate with Sentry
+      </aha-button>
+    )
+  }
+
   const handleClickAddSentry = async () => {
     runCommand(record, "addLink");
   };
