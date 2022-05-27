@@ -36,7 +36,7 @@ const Select = ({ options, value, labelKey = "label", valueKey = "value", onChan
           }
           return (
             <aha-menu-item>
-              <a href="#" onClick={() => handleClickOption(val)}>{label}</a>
+              <aha-button kind="plain" onClick={() => handleClickOption(val)}>{label}</aha-button>
             </aha-menu-item>
           );
         })}
