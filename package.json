@@ -1,7 +1,7 @@
 {
   "name": "@aha-develop/sentry",
   "description": "Sentry integration",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "Aha! (support@aha.io)",
   "scripts": {
     "format": "prettier --write 'src/**/*.ts'"
