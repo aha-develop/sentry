@@ -79,7 +79,7 @@ importer.on({ action: "listCandidates" }, async ({ filters, nextPage }) => {
 /**
  * Renders Import Record
  */
-importer.on({ action: "renderRecord" },  async ({ record, onUnmounted }) => {
+importer.on({ action: "renderRecord" }, async ({ record, onUnmounted }) => {
   await authenticate();
   return (
     <div>
