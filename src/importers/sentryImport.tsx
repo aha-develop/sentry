@@ -1,4 +1,3 @@
-import React from "react";
 import { get } from "lodash";
 
 import sentryClient from "../helpers/SentryClient";
@@ -80,7 +79,7 @@ importer.on({ action: "listCandidates" }, async ({ filters, nextPage }) => {
 /**
  * Renders Import Record
  */
-importer.on({ action: "renderRecord" }, async ({ record, onUnmounted }) => {
+importer.on({ action: "renderRecord" },  async ({ record, onUnmounted }) => {
   await authenticate();
   return (
     <div>
@@ -114,7 +113,7 @@ importer.on({ action: "importRecord" }, async ({ importRecord, ahaRecord }, { id
     <a href='${importRecord.permalink}'>View on Sentry</a>
   </p>` as any;
 
-  await setExtensionFields(ahaRecord, { isSentry: true, issue_id: importRecord.id }, identifier);
-
   await ahaRecord.save();
+
+  await setExtensionFields(ahaRecord, { isSentry: true, issue_id: importRecord.id }, identifier);
 });
