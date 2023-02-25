@@ -1,7 +1,7 @@
 {
   "name": "@aha-develop/sentry",
   "description": "Sentry integration",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "author": "Aha! (support@aha.io)",
   "scripts": {
     "format": "prettier --write 'src/**/*.ts'"
@@ -53,8 +53,7 @@
           "entryPoint": "src/commands/addLink.ts"
         }
       }
-    },
-    "jsxFactory": "aha.createElement"
+    }
   },
   "dependencies": {
     "@aha-app/aha-develop-react": "^1.0.6",

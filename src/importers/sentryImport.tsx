@@ -1,5 +1,5 @@
+import React from "react";
 import { get } from "lodash";
-
 import sentryClient from "../helpers/SentryClient";
 import { convertOptions } from "@helpers/convertOptions";
 import { MAX_RESULTS } from "@helpers/config";
