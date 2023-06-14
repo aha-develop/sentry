@@ -41,7 +41,6 @@ export const EmptyState: React.FC<{ record: Aha.RecordUnion }> = ({
           marginBottom: 0,
         }}
         onChange={(e) => pasteLink(e.target.value)}
-        autoFocus
       />
       {validation}
     </>
