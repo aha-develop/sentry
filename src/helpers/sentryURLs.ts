@@ -15,7 +15,7 @@ export const parseSentryUrl = (url) => {
     return null
   }
 
-  const [_, orgid, issue_id] = match
+  const [_, orgId, issueId] = match
   return {
     orgId,
     issueId
