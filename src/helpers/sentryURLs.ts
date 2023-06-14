@@ -21,3 +21,5 @@ export const parseSentryUrl = (url) => {
     issueId
   }
 }
+
+export const ValidationMessage = "Please enter a valid Sentry URL. It should match 'https://:org_name.sentry.io/issues/:issue_id' or 'https://sentry.io/organizations/:org_id/issues/:issue_id'."
