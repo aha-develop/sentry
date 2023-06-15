@@ -1,18 +1,20 @@
-import { parseURL } from "@helpers/parseURL";
 import { setExtensionFields } from "@helpers/setExtensionFields";
-import { validSentryURL } from "@helpers/validSentryURL";
+import { validSentryURL, parseSentryUrl, ValidationMessage } from "@helpers/sentryURLs";
 
-aha.on("addLink", async ({ record, context }) => {
+aha.on("addLink", async ({ record }) => {
   const issueURL: string = await aha.commandPrompt("Link URL", {
-    placeholder: "Enter the Sentry Issue URL",
+    placeholder: "Enter the Sentry issue URL",
   });
 
   if (!validSentryURL(issueURL)) {
-    throw new Error("Please enter a valid Sentry URL");
+    throw new Error(ValidationMessage);
   }
 
-  const res = parseURL(issueURL, "/organizations/:org_id/issues/:issue_id");
-  if (res?.issue_id && res?.org_id) {
-    setExtensionFields(record, { isSentry: true, issue_id: res?.issue_id });
+  const data = parseSentryUrl(issueURL);
+  if (data && data.issueId) {
+    setExtensionFields(record, {
+      isSentry: true,
+      issue_id: data.issueId
+    });
   }
 });

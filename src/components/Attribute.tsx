@@ -4,9 +4,8 @@ import sentryClient from "@helpers/SentryClient";
 import { convertStrToDate } from "@helpers/convertStrToDate";
 import AttributeCard from "./AttributeCard";
 import AttributeChart from "./AttributeChart";
-import { setExtensionFields } from "@helpers/setExtensionFields";
-import { parseURL } from "@helpers/parseURL";
 import { runCommand } from "@helpers/runCommand";
+import { EmptyState } from "./EmptyState";
 
 export type AttributeProps = {
   record: Aha.RecordUnion;
@@ -26,28 +25,24 @@ const Attribute = ({ fields, record }: AttributeProps) => {
     [fields?.issue_id, fields?.isSentry]
   );
 
-  if (!authed) {
-    return (
-      <aha-button size="small" onClick={e => fetchData()}>
-        Authenticate with Sentry
-      </aha-button>
-    )
-  }
-
   const handleClickAddSentry = async () => {
     runCommand(record, "addLink");
   };
 
-  if (!fields?.isSentry) {
-    return (
-      <aha-button kind="link" size="medium" type="button" onClick={handleClickAddSentry}>
-        Link to Sentry Issue
-      </aha-button>
-    );
+  if (!fields.isSentry) {
+    return <EmptyState record={record} />
   }
 
   if (loading) {
     return <aha-spinner />;
+  }
+
+  if (!authed) {
+    return (
+      <aha-button size="small" onClick={e => fetchData()}>
+        Authenticate with Sentry to view issue details
+      </aha-button>
+    )
   }
 
   const details = [
