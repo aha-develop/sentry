@@ -51,6 +51,7 @@
         "addLink": {
           "title": "Link sentry issue to record",
           "entryPoint": "src/commands/addLink.ts",
+          "commandType": "recordAction",
           "recordTypes": [
             "Feature",
             "Epic",
