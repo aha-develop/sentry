@@ -49,7 +49,7 @@
       },
       "commands": {
         "addLink": {
-          "title": "Sentry: Link sentry issue to record",
+          "title": "Link sentry issue to record",
           "entryPoint": "src/commands/addLink.ts",
           "recordTypes": [
             "Feature",
