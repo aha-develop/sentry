@@ -1,3 +1,6 @@
+# Aha! CLI
+.aha-cache
+
 # Logs
 logs
 *.log
