@@ -85,7 +85,7 @@ const Attribute = ({ fields, record }: AttributeProps) => {
           </aha-flex>
 
           <aha-flex direction="row" justify-content="flex-end">
-            <aha-button kind="secondary" href={data.permalink} size="mini">
+            <aha-button kind="secondary" href={data.permalink} size="mini" target="_blank">
               View in Sentry
             </aha-button>
           </aha-flex>

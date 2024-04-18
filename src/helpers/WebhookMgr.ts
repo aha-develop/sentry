@@ -40,7 +40,7 @@ export class WebhookMgr {
         <pre>${title}</pre>
       </p>
       <p>
-        <a href='${this.filterPayload("issue_url")}}'>View on Sentry</a>
+        <a href='${this.filterPayload("issue_url")}}'>View in Sentry</a>
       </p>` as any;
       record.setExtensionField(this.identifier, "issue_id", issue_id);
       record.setExtensionField(this.identifier, "isSentry", true);
