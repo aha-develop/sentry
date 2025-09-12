@@ -1,4 +1,3 @@
-import _ from "lodash";
 import { IDENTIFIER } from "./config";
 
 type FilterPayloadKey = "issue_id" | "web_url" | "api_url" | "user" | "event_id" | "issue_url" | "title";
@@ -62,17 +61,23 @@ export class WebhookMgr {
     const data = keys.reduce((acc, key) => {
       switch (key) {
         case "api_url":
-          acc[key] = _.get(this.payload, `${this.resource}.url`);
+          acc[key] = this.getProp(this.payload, `${this.resource}.url`);
           break;
         case "issue_id":
-          acc[key] = _.get(this.payload, `issue.id`);
+          acc[key] = this.getProp(this.payload, `issue.id`);
           break;
         default:
-          acc[key] = _.get(this.payload, `${this.resource}.${key}`);
+          acc[key] = this.getProp(this.payload, `${this.resource}.${key}`);
           break;
       }
       return acc;
     }, {});
     return keys.length === 1 ? data[keys[0]] : data;
+  };
+
+  // Safely access nested properties using dot paths (e.g., "issue.id")
+  private getProp = (obj: any, path: string) => {
+    if (!obj || !path) return undefined;
+    return path.split(".").reduce((acc: any, key: string) => (acc == null ? undefined : acc[key]), obj);
   };
 }
