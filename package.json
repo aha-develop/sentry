@@ -61,8 +61,8 @@
       },
       "settings": {
         "region": {
-          "title": "Sentry server region",
-          "description": "The region your Sentry account is hosted in (e.g. US/EU)",
+          "title": "Sentry data storage location",
+          "description": "Your Sentry account's data storage location (United States or European Union).",
           "type": "string",
           "default": "us",
           "options": [
