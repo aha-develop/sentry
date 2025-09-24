@@ -33,13 +33,19 @@ export class WebhookMgr {
       const issue_id = this.filterPayload("issue_id");
       const record = new aha.models["Feature"]();
       const title = this.filterPayload("title");
+
+      const team = await aha.models.Project.select("id").find(
+        aha.settings.get(`${this.identifier}.team`) as string
+      );
+
+      record.team = team;
       record.name = title;
       record.description = `
       <p>
         <pre>${title}</pre>
       </p>
       <p>
-        <a href='${this.filterPayload("issue_url")}}'>View in Sentry</a>
+        <a href='${this.filterPayload("web_url")}'>View in Sentry</a>
       </p>` as any;
       record.setExtensionField(this.identifier, "issue_id", issue_id);
       record.setExtensionField(this.identifier, "isSentry", true);
@@ -61,13 +67,13 @@ export class WebhookMgr {
     const data = keys.reduce((acc, key) => {
       switch (key) {
         case "api_url":
-          acc[key] = this.getProp(this.payload, `${this.resource}.url`);
+          acc[key] = this.getProp(this.payload, `data.${this.resource}.url`);
           break;
         case "issue_id":
-          acc[key] = this.getProp(this.payload, `issue.id`);
+          acc[key] = this.getProp(this.payload, `data.issue.id`);
           break;
         default:
-          acc[key] = this.getProp(this.payload, `${this.resource}.${key}`);
+          acc[key] = this.getProp(this.payload, `data.${this.resource}.${key}`);
           break;
       }
       return acc;
