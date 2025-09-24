@@ -58,6 +58,35 @@
             "Requirement"
           ]
         }
+      },
+      "settings": {
+        "region": {
+          "title": "Sentry server region",
+          "description": "The region your Sentry account is hosted in (e.g. US/EU)",
+          "type": "string",
+          "default": "us",
+          "options": [
+            {
+              "label": "US",
+              "value": "us"
+            },
+            {
+              "label": "EU",
+              "value": "eu"
+            }
+          ],
+          "scope": [
+            "account"
+          ]
+        },
+        "team": {
+          "title": "Aha! webhook team",
+          "description": "The reference prefix of the Aha! team where features will be created from incoming Sentry webhook issues.",
+          "type": "string",
+          "scope": [
+            "account"
+          ]
+        }
       }
     }
   },

@@ -1,7 +1,15 @@
 /**
  * Sentry API EndPoint
  */
-export const API_URL = "https://sentry.io/api/0";
+const EU_API_URL = "https://de.sentry.io/api/0";
+const US_API_URL = "https://sentry.io/api/0";
+
+export const DEFAULT_REGION = "us";
+
+export const API_URL_MAPPING = {
+  eu: EU_API_URL,
+  us: US_API_URL,
+};
 
 /**
  * Pagination Limit
