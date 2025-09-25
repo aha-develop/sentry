@@ -19,7 +19,8 @@
   },
   "ahaExtension": {
     "cspSources": [
-      "https://sentry.io"
+      "https://sentry.io",
+      "https://de.sentry.io"
     ],
     "contributes": {
       "importers": {
